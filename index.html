@@ -1,77 +1,622 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReadmeRank</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReadmeRank</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f6f8fa;
-    }
+<style>
+*{box-sizing:border-box}
 
-    h1 {
-      text-align: center;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f6f8;
+  color:#17202a;
+}
 
-    textarea {
-      width: 100%;
-      height: 220px;
-      padding: 15px;
-      box-sizing: border-box;
-      margin: 15px 0;
-    }
+.container{
+  max-width:850px;
+  margin:40px auto;
+  padding:20px;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #238636;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-    }
+.hero{
+  background:#111827;
+  color:white;
+  padding:35px 25px;
+  border-radius:20px;
+  text-align:center;
+  margin-bottom:25px;
+}
 
-    #result {
-      margin-top: 20px;
-      padding: 20px;
-      background: white;
-      border-radius: 8px;
-    }
-  </style>
+.hero h1{
+  margin:0 0 10px;
+  font-size:38px;
+}
+
+.hero p{
+  margin:0;
+  color:#d1d5db;
+  line-height:1.7;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  margin-bottom:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+textarea{
+  width:100%;
+  min-height:280px;
+  padding:16px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  font-family:monospace;
+  font-size:14px;
+  resize:vertical;
+  direction:ltr;
+}
+
+button{
+  width:100%;
+  margin-top:15px;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.hidden{
+  display:none;
+}
+
+.scoreBox{
+  text-align:center;
+  padding:25px;
+}
+
+.score{
+  font-size:70px;
+  font-weight:bold;
+  margin:10px 0;
+}
+
+.scoreText{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.progress{
+  height:12px;
+  background:#e5e7eb;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:20px;
+}
+
+.progressBar{
+  height:100%;
+  width:0%;
+  background:#2563eb;
+  transition:width .7s;
+}
+
+.item{
+  padding:18px;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  margin:12px 0;
+}
+
+.item h3{
+  margin:0 0 8px;
+}
+
+.good{
+  border-right:5px solid #16a34a;
+}
+
+.medium{
+  border-right:5px solid #f59e0b;
+}
+
+.bad{
+  border-right:5px solid #dc2626;
+}
+
+.item p{
+  margin:5px 0;
+  line-height:1.7;
+}
+
+ul{
+  line-height:2;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+
+.stat{
+  background:#f8fafc;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:24px;
+}
+
+@media(max-width:600px){
+  .container{
+    margin:15px auto;
+    padding:12px;
+  }
+
+  .hero h1{
+    font-size:30px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <h1>ReadmeRank</h1>
+<div class="container">
 
-  <p>أدخل ملف README للحصول على تقييم سريع.</p>
+  <section class="hero">
+    <h1>ReadmeRank</h1>
+    <p>
+      حلّل ملف README الخاص بمشروعك واحصل على تقييم من 100
+      مع معرفة نقاط القوة والضعف وكيفية تحسينه.
+    </p>
+  </section>
 
-  <textarea id="readme" placeholder="ضع محتوى README هنا..."></textarea>
+  <section class="card">
 
-  <button onclick="checkReadme()">تقييم README</button>
+    <label for="readme">
+      الصق محتوى README هنا
+    </label>
 
-  <div id="result"></div>
+    <textarea id="readme" placeholder="# My Project
 
-  <script>
-    function checkReadme() {
-      const text = document.getElementById("readme").value;
-      let score = 0;
+اكتب أو الصق README الخاص بمشروعك هنا..."></textarea>
 
-      if (text.length > 100) score += 20;
-      if (text.toLowerCase().includes("install")) score += 20;
-      if (text.toLowerCase().includes("usage")) score += 20;
-      if (text.includes("#")) score += 20;
-      if (text.toLowerCase().includes("license")) score += 20;
+    <button onclick="analyzeREADME()">
+      🔍 تحليل README
+    </button>
 
-      document.getElementById("result").innerHTML =
-        "<h2>النتيجة: " + score + "/100</h2>";
+  </section>
+
+  <section id="results" class="hidden">
+
+    <div class="card scoreBox">
+
+      <h2>النتيجة النهائية</h2>
+
+      <div id="score" class="score">0</div>
+
+      <div id="scoreText" class="scoreText"></div>
+
+      <div class="progress">
+        <div id="progressBar" class="progressBar"></div>
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong id="wordCount">0</strong>
+          كلمة
+        </div>
+
+        <div class="stat">
+          <strong id="sectionCount">0</strong>
+          أقسام
+        </div>
+
+        <div class="stat">
+          <strong id="linkCount">0</strong>
+          روابط
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>📊 التحليل التفصيلي</h2>
+
+      <div id="analysis"></div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>💡 اقتراحات التحسين</h2>
+
+      <ul id="suggestions"></ul>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+
+function analyzeREADME(){
+
+  const text = document.getElementById("readme").value.trim();
+
+  if(!text){
+
+    alert("من فضلك الصق README أولاً.");
+
+    return;
+  }
+
+  let score = 0;
+  const analysis = [];
+  const suggestions = [];
+
+  const lower = text.toLowerCase();
+
+  const words = text.split(/\s+/).filter(Boolean).length;
+
+  const sections = text.match(/^#{1,6}\s+.+/gm) || [];
+
+  const links = text.match(/https?:\/\/[^\s)]+/g) || [];
+
+  const images = text.match(/!\[.*?\]\(.*?\)/g) || [];
+
+  const codeBlocks = text.match(/```[\s\S]*?```/g) || [];
+
+  const badges =
+    text.match(/!\[.*?badge.*?\]\(.*?\)/gi) ||
+    text.match(/shields\.io/gi) ||
+    [];
+
+  const hasTitle = /^#\s+.+/m.test(text);
+
+  const hasDescription =
+    text.length > 150 &&
+    !/^#\s+.+\s*$/m.test(text);
+
+  const hasInstall =
+    /(install|installation|تنصيب|تثبيت)/i.test(text);
+
+  const hasUsage =
+    /(usage|how to use|استخدام|طريقة الاستخدام)/i.test(text);
+
+  const hasFeatures =
+    /(features|المميزات|المزايا)/i.test(text);
+
+  const hasRequirements =
+    /(requirements|prerequisites|المتطلبات)/i.test(text);
+
+  const hasLicense =
+    /(license|licence|الترخيص|الرخصة)/i.test(text);
+
+  const hasContributing =
+    /(contributing|contribution|المساهمة)/i.test(text);
+
+  const hasExamples =
+    /(example|examples|مثال|أمثلة)/i.test(text) ||
+    codeBlocks.length > 0;
+
+  const hasContact =
+    /(contact|email|discord|telegram|تواصل)/i.test(text);
+
+  function addItem(title, ok, goodText, badText, points){
+
+    if(ok){
+
+      score += points;
+
+      analysis.push({
+        type:"good",
+        title:"✅ " + title,
+        text:goodText
+      });
+
+    }else{
+
+      analysis.push({
+        type:"bad",
+        title:"❌ " + title,
+        text:badText
+      });
+
+      suggestions.push(badText);
     }
-  </script>
+  }
+
+  addItem(
+    "عنوان المشروع",
+    hasTitle,
+    "يوجد عنوان واضح للمشروع.",
+    "أضف عنواناً واضحاً في بداية README.",
+    8
+  );
+
+  addItem(
+    "وصف المشروع",
+    hasDescription,
+    "يوجد محتوى كافٍ يشرح المشروع.",
+    "أضف وصفاً مختصراً يشرح ما المشكلة التي يحلها المشروع.",
+    10
+  );
+
+  addItem(
+    "طريقة التثبيت",
+    hasInstall,
+    "طريقة التثبيت موجودة.",
+    "أضف قسم Installation يشرح للمستخدم كيف يثبت المشروع.",
+    10
+  );
+
+  addItem(
+    "طريقة الاستخدام",
+    hasUsage,
+    "README يشرح كيفية استخدام المشروع.",
+    "أضف قسم Usage مع خطوات واضحة لاستخدام المشروع.",
+    10
+  );
+
+  addItem(
+    "المميزات",
+    hasFeatures,
+    "المميزات موضحة.",
+    "أضف قائمة واضحة بأهم Features.",
+    8
+  );
+
+  addItem(
+    "المتطلبات",
+    hasRequirements,
+    "المتطلبات مذكورة.",
+    "أضف Requirements مثل إصدار اللغة والمكتبات المطلوبة.",
+    7
+  );
+
+  addItem(
+    "أمثلة",
+    hasExamples,
+    "يوجد مثال أو كود يساعد المطور.",
+    "أضف أمثلة عملية أو Code Blocks توضح طريقة الاستخدام.",
+    10
+  );
+
+  addItem(
+    "الترخيص",
+    hasLicense,
+    "يوجد قسم للترخيص.",
+    "أضف License واضحاً للمشروع.",
+    7
+  );
+
+  addItem(
+    "المساهمة",
+    hasContributing,
+    "يوجد توضيح لطريقة المساهمة.",
+    "أضف Contributing Guide إذا كنت تريد استقبال مساهمات المطورين.",
+    5
+  );
+
+  addItem(
+    "التواصل",
+    hasContact,
+    "يوجد وسيلة للتواصل.",
+    "أضف طريقة للتواصل أو رابط المجتمع الخاص بالمشروع.",
+    5
+  );
+
+  if(images.length > 0){
+
+    score += 5;
+
+    analysis.push({
+      type:"good",
+      title:"✅ الصور",
+      text:"README يحتوي على صور يمكن أن تساعد في شرح المشروع."
+    });
+
+  }else{
+
+    suggestions.push(
+      "فكر في إضافة Screenshot أو صورة توضح واجهة المشروع."
+    );
+
+    analysis.push({
+      type:"medium",
+      title:"⚠️ الصور",
+      text:"لا توجد صور واضحة في README."
+    });
+  }
+
+  if(links.length > 0){
+
+    score += 5;
+
+    analysis.push({
+      type:"good",
+      title:"✅ الروابط",
+      text:"README يحتوي على روابط مفيدة."
+    });
+
+  }else{
+
+    suggestions.push(
+      "أضف روابط مهمة مثل الموقع الرسمي أو Documentation أو Demo."
+    );
+
+    analysis.push({
+      type:"medium",
+      title:"⚠️ الروابط",
+      text:"لا توجد روابط خارجية واضحة."
+    });
+  }
+
+  if(badges.length > 0){
+
+    score += 5;
+
+    analysis.push({
+      type:"good",
+      title:"✅ Badges",
+      text:"README يحتوي على Badges."
+    });
+
+  }else{
+
+    suggestions.push(
+      "يمكنك إضافة Badges مثل build status أو version أو license."
+    );
+
+    analysis.push({
+      type:"medium",
+      title:"⚠️ Badges",
+      text:"لا توجد Badges ظاهرة."
+    });
+  }
+
+  if(words > 300){
+
+    score += 5;
+
+    analysis.push({
+      type:"good",
+      title:"✅ مستوى التفاصيل",
+      text:"README يحتوي على كمية جيدة من المعلومات."
+    });
+
+  }else{
+
+    suggestions.push(
+      "README قصير نسبياً. أضف مزيداً من التفاصيل العملية."
+    );
+
+    analysis.push({
+      type:"medium",
+      title:"⚠️ مستوى التفاصيل",
+      text:"README قد يحتاج إلى مزيد من المعلومات."
+    });
+  }
+
+  score = Math.min(100, score);
+
+  document.getElementById("results").classList.remove("hidden");
+
+  document.getElementById("score").textContent = score;
+
+  document.getElementById("progressBar").style.width = score + "%";
+
+  document.getElementById("wordCount").textContent = words;
+
+  document.getElementById("sectionCount").textContent = sections.length;
+
+  document.getElementById("linkCount").textContent = links.length;
+
+  let scoreText = "";
+
+  if(score >= 85){
+
+    scoreText = "🔥 README ممتاز وجاهز بشكل قوي للمطورين.";
+
+  }else if(score >= 70){
+
+    scoreText = "🟢 README جيد، وهناك بعض التحسينات الممكنة.";
+
+  }else if(score >= 50){
+
+    scoreText = "🟡 README متوسط ويحتاج إلى تحسينات مهمة.";
+
+  }else{
+
+    scoreText = "🔴 README يحتاج إلى تحسين كبير.";
+
+  }
+
+  document.getElementById("scoreText").textContent = scoreText;
+
+  const analysisBox = document.getElementById("analysis");
+
+  analysisBox.innerHTML = "";
+
+  analysis.forEach(item => {
+
+    const div = document.createElement("div");
+
+    div.className = "item " + item.type;
+
+    div.innerHTML = `
+      <h3>${item.title}</h3>
+      <p>${item.text}</p>
+    `;
+
+    analysisBox.appendChild(div);
+
+  });
+
+  const suggestionBox =
+    document.getElementById("suggestions");
+
+  suggestionBox.innerHTML = "";
+
+  if(suggestions.length === 0){
+
+    suggestionBox.innerHTML =
+      "<li>🎉 لا توجد اقتراحات رئيسية. README في حالة جيدة جداً.</li>";
+
+  }else{
+
+    suggestions.forEach(s => {
+
+      const li = document.createElement("li");
+
+      li.textContent = s;
+
+      suggestionBox.appendChild(li);
+
+    });
+
+  }
+
+  document.getElementById("results").scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+</script>
 
 </body>
     </html>
