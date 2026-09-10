@@ -21,7 +21,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='main-title'>🚀 ReadmeRank Pro</h1>", unsafe_allow_html=Platform := None)
+st.markdown("<h1 class='main-title'>🚀 ReadmeRank Pro</h1>", unsafe_allow_html=True)
 st.write("<p style='text-align: center;'>الأداة الاحترافية الأولى لتقييم، تحليل، وترقية ملفات الـ README للمطورين بمساعدة الذكاء الاصطناعي.</p>", unsafe_allow_html=True)
 
 # الشريط الجانبي للإعدادات المتقدمة
@@ -47,7 +47,7 @@ if not api_key:
 
 st.sidebar.markdown("---")
 analysis_mode = st.sidebar.selectbox(
-    "🎯 مستوى التحليل المطلوبة:",
+    "🎯 مستوى التحليل المطلوب:",
     ["تحليل شامل واحترافي (Detailed)", "تحليل سريع ومباشر (Quick)"]
 )
 
@@ -79,7 +79,7 @@ if st.button("🚀 ابدأ الفحص والتحليل الذكي", type="prima
                 depth_instruction = "قدم تقييماً عميقاً ومفصلاً جداً مع أمثلة برمجية" if "شامل" in analysis_mode else "قدم تقييماً سريعاً ومباشراً لأهم النقاط"
                 
                 prompt = f"""
-                قم بتحليل ملف الـ README التالي للمطورين بصفتك خبير هندسة برمجيات وخبير توثيق مشاريع مفتوحة الصור (Open Source).
+                قم بتحليل ملف الـ README التالي للمطورين بصفتك خبير هندسة برمجيات وخبير توثيق مشاريع مفتوحة الصورس (Open Source).
                 اتبع المعايير الآتية بدقة:
                 1. النتيجة الإجمالية (Readme Score) من 100 مع تحديد تصنيف المشروع (مبتدئ، متوسط، احترافي عالمي).
                 2. تقييم ووضوح خطوات التثبيت (Installation) والاستخدام (Usage).
@@ -91,7 +91,7 @@ if st.button("🚀 ابدأ الفحص والتحليل الذكي", type="prima
                 {readme_text}
                 """
                 
-                # استدعاء الموديل (Gemini 1.5 Flash الأسرع والأدق)
+                # استدعاء الموديل
                 model = genai.GenerativeModel("gemini-1.5-flash")
                 response = model.generate_content(prompt)
                 
@@ -112,4 +112,4 @@ if st.button("🚀 ابدأ الفحص والتحليل الذكي", type="prima
                 
             except Exception as e:
                 st.error(f"حدث خطأ أثناء الاتصال بنظام الذكاء الاصطناعي: {e}")
-                
+            
