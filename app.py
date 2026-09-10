@@ -1,58 +1,55 @@
 import streamlit as st
-from google import genai
-import re
+import google.generativeai as genai
 
-st.set_page_config(page_title="README AI Evaluator", page_icon="📝", layout="wide")
+# إعدادات الصفحة
+st.set_page_config(page_title="ReadmeRank", page_icon="🚀", layout="centered")
 
-st.title("📝 أداة تقييم ملفات README بالذكاء الاصطناعي")
-st.write("أدخل نص الـ README للحصول على تقييم شامل وتحليل ذكي.")
+st.title("🚀 ReadmeRank - تقييم وتحليل ملفات الـ README")
+st.write("أداة ذكية لتقييم وتحسين ملفات الـ README بمساعدة الذكاء الاصطناعي.")
 
-with st.sidebar:
-    st.header("⚙️ الإعدادات")
-    api_key = st.text_input("أدخل Gemini API Key:", type="password")
-    st.markdown("[احصل على مفتاح مجاني من Google AI Studio](https://aistudio.google.com/)")
+# محاولة جلب المفتاح تلقائياً من أسرار المنصة، ولو مش موجود يظهر في الشريط الجانبي
+api_key = ""
+try:
+    api_key = st.secrets.get("GEMINI_API_KEY", "")
+except Exception:
+    pass
 
-readme_text = st.text_area("إلصق نص README هنا:", height=300)
+if not api_key:
+    api_key = st.sidebar.text_input("أدخل مفتاح Google Gemini API:", type="password")
 
-if st.button("🚀 فحص وتقييم README", type="primary"):
+# مساحة إدخال الـ README
+readme_text = st.text_area("ضع محتوى ملف الـ README هنا:", height=250)
+
+if st.button("🚀 فحص وتقييم README"):
     if not api_key:
-        st.error("يرجى إدخال Gemini API Key في الشريط الجانبي أولاً.")
-    elif not readme_text.strip():
-        st.warning("يرجى إدخال نص الـ README لفحصه.")
+        st.error("الرجاء إدخال مفتاح الـ API (سواء في إعدادات المنصة أو الشريط الجانبي) أولاً.")
+    elif not readme_text:
+        st.error("الرجاء إدخال محتوى الـ README للقيام بالتحليل.")
     else:
-        with st.spinner("جاري التحليل وفحص المكونات والأكواد..."):
-            try:
-                client = genai.Client(api_key=api_key)
-                links_count = len(re.findall(f'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', readme_text))
-
-                prompt = f"""
-                أنت خبير في مراجعة وتطوير مشاريع البرمجيات والأكواد.
-                قم بتحليل ملف الـ README التالي بدقة وإعطاء تقرير باللغة العربية.
-
-                النص:
-                ---
-                {readme_text}
-                ---
-
-                المطلوب:
-                1. النتيجة الإجمالية (Readme Score) من 100.
-                2. تحليل المعنى والسياق الضمني وهدف المشروع.
-                3. فحص دعم التقنيات (خاصة React) وشرح الأكواد.
-                4. فحص الهيكل والأقسام المفقودة والروابط المكتشفة ({links_count}).
-                5. أهم 3-5 نقاط تحسينية فورية.
-                """
-
-                response = client.models.generate_content(
-                    model="gemini-1.5-flash",
-                    
-                    
-                    
-                    contents=prompt,
-                )
-
-                st.success("تم التحليل بنجاح!")
-                st.markdown("---")
-                st.markdown(response.text)
-
-            except Exception as e:
-                st.error(f"حدث خطأ أثناء الاتصال: {e}")
+        try:
+            genai.configure(api_key=api_key)
+            
+            # إعداد البرومبت للتقييم
+            prompt = f"""
+            قم بتحليل ملف الـ README التالي واعطني تقييماً مفصلاً بناءً على المعايير الآتية:
+            1. النتيجة الإجمالية (Readme Score) من 100.
+            2. تحليل المعنى والسياق الضمني وهدف المشروع.
+            3. شرح الأكواد فحص دعم التقنيات.
+            4. الهيكل والأقسام المفقودة والروابط المكتشفة.
+            5. أهم 3-5 نقاط تحسينية فورية.
+            
+            محتوى الـ README:
+            {readme_text}
+            """
+            
+            # استدعاء الموديل
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+            
+            st.success("تم التحليل بنجاح!")
+            st.markdown("---")
+            st.markdown(response.text)
+            
+        except Exception as e:
+            st.error(f"حدث خطأ أثناء الاتصال: {e}")
+        
