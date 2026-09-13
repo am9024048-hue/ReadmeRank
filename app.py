@@ -129,7 +129,8 @@ if st.button("Analyze README", type="primary"):
           )
 
           # ضع رابط تطبيقك الفعلي هنا بدل الـ localhost أو رابط الـ streamlit القديم
-          app_public_url = "https://your-streamlit-app-url.streamlit.app"
+          app_public_url = "https://readmerank.streamlit.app"
+            
           badge_markdown = (
               f"[![ReadmeRank]({badge_url})]({app_public_url})"
           )
