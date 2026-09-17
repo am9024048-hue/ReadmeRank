@@ -28,7 +28,7 @@ def evaluate_readme():
     print(f"Overall Score: {score:.1f}/100\n")
     print("Detailed Checks:")
     for section, passed in checks.items():
-    status = "✅ Passed" if found else "❌ Missing"
+    status = "✅ Passed" if passed else "❌ Missing"
     
         print(f"- {section}: {status}")
         
