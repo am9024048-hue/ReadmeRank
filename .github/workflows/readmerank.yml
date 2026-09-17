@@ -1,68 +1,14 @@
-name: 'ReadmeRank Audit'
-description: 'Audits your repository README, spots missing sections, and highlights formatting flaws instantly.'
-author: 'Ahmed Mohamed'
+name: Run ReadmeRank
 
-inputs:
-  readme_path:
-    description: 'Path to the README file'
-    required: false
-    default: 'README.md'
+on: [push]
 
-runs:
-  using: 'composite'
-  steps:
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Run ReadmeRank Audit
-      shell: bash
-      run: |
-        python -c "
-        import os
-
-        path = '${{ inputs.readme_path }}'
-        if not os.path.exists(path):
-            print(f'❌ Error: {path} not found!')
-            exit(1)
-
-        with open(path, 'r', encoding='utf-8') as f:
-            content = f.read()
-
-        content_lower = content.lower()
-
-        sections = {
-            'Installation': ['installation', 'install', 'getting started'],
-            'Usage': ['usage', 'how to use', 'examples'],
-            'Contributing': ['contributing', 'contribute'],
-            'License': ['license']
-        }
-
-        print('=' * 50)
-        print(f'📊 ReadmeRank Audit Report for: {path}')
-        print('=' * 50)
+      - name: Run my Action
+        uses: ./
         
-        missing_count = 0
-        for section, keywords in sections.items():
-            found = any(kw in content_lower for kw in keywords)
-            if found:
-                print(f'✅ Found section: {section}')
-            else:
-                print(f'⚠️ Missing section: {section}')
-                missing_count += 1
-
-        print('=' * 50)
-        if missing_count == 0:
-            print('🎉 Great job! Your README contains all key sections.')
-        else:
-            print(f'💡 Tip: Your project is losing visibility score due to {missing_count} missing section(s).')
-        
-        print('-' * 50)
-        print('🔒 [ReadmeRank Pro Preview Locked]')
-        print('   - AI-powered auto-generation of missing sections is locked.')
-        print('   - Advanced SEO keyword optimization for GitHub search is locked.')
-        print('   👉 Upgrade to ReadmeRank Pro to auto-fix and boost your ranking:')
-        print('      https://readmerank.streamlit.app/pro')
-        print('=' * 50)
-        "
