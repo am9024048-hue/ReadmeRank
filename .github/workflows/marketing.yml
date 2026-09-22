@@ -1,1 +1,32 @@
+name: Run Marketing Agency
 
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # يتيح لك تشغيله يدوياً من زر في جيت هب
+
+jobs:
+  run-marketing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Marketing Agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python marketing_agent.py
+          
