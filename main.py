@@ -6,6 +6,7 @@ import requests
 # ========================================================
 def call_github_model(prompt_text):
     url = "https://models.inference.ai.azure.com/chat/completions"
+    
     github_token = os.environ.get("GITHUB_TOKEN")
     
     if not github_token:
