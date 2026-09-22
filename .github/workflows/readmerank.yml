@@ -15,5 +15,6 @@ jobs:
       - name: Run My ReadmeRank Action
         uses: ./
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    
           
