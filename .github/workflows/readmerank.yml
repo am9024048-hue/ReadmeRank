@@ -1,1 +1,19 @@
+name: Test ReadmeRank AI
 
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run My ReadmeRank Action
+        uses: ./ # بيشغل الأداة مباشرة من نفس الريبو
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
